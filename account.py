@@ -18,6 +18,21 @@ class Account:
             print(f'New Balance after Withdrew: ${self.__current_balance}\n'
                   'Withdrawal Successfully\n')
 
+    def get_account_no(self):
+        return self.__account_no
+
+    def get_account_type(self):
+        return self.__account_type
+
+    def get_current_balance(self):
+        return self.__current_balance
+
+    def get_date_created(self):
+        return self.__date_created
+
+    def set_account_type(self, new_account_type):
+        self.__account_type = new_account_type
+
     def display_information(self):
         print(f'Account Number:{self.__account_no}')
         print(f'Account Type:{self.__account_type}')

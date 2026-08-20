@@ -28,16 +28,30 @@ class Transaction:
         else:
             print('Transaction cannot be cancelled')
 
-    def update_transaction(self, description):
-        self.__description = description
-        print('Transaction description updated')
-
     def display_information(self):
         print(f'Transaction ID: {self.__transaction_id}')
         print(f'Transaction Type: {self.__transaction_type}')
         print(f'Amount: ${self.__amount}')
         print(f'Description: {self.__description}')
         print(f'Status: {self.__status}\n')
+
+    def get_transaction_id(self):
+        return self.__transaction_id
+
+    def get_transaction_type(self):
+        return self.__transaction_type
+
+    def get_amount(self):
+        return self.__amount
+
+    def get_description(self):
+        return self.__description
+
+    def get_status(self):
+        return self.__status
+
+    def set_description(self, new_description):
+        self.__description = new_description
 
     def __str__(self):
         return (f"{self.__transaction_id} has the transaction type: "
