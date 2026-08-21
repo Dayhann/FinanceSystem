@@ -23,9 +23,9 @@ class Branch:
 
     def opening_state(self):
         if self.__is_open:
-            return "open"
+            return "Yes"
         else:
-            return "closed"
+            return "Closed"
 
     def get_branch_number(self):
         return self.__branch_number
@@ -39,17 +39,11 @@ class Branch:
     def get_phone_number(self):
         return self.__phone_number
 
-    def get_is_open(self):
-        return self.__is_open
-
     def set_phone_number(self, new_phone_number):
         self.__phone_number = new_phone_number
 
-    def set_is_open(self, is_open):
-        self.__is_open = is_open
-
     def update_phone_number(self, phone_number):
-        self.__phone_number = phone_number
+        self.set_phone_number(phone_number)
         print(f'{self.__branch_name} branch phone number updated\n')
 
     def display_information(self):
