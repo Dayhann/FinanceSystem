@@ -106,6 +106,50 @@ print(repr(branch))
 print(repr(branch_2))
 print(repr(branch_3))
 
+print('====================ENCAPSULATION: READING WITH GETTERS====================')
+
+print(f'Client 2 number: {client_2.get_client_no()}')
+print(f'Client 2 name: {client_2.get_first_name()} {client_2.get_last_name()}')
+print(f'Client 2 email: {client_2.get_email()}')
+print(f'Client 2 address: {client_2.get_address()}')
+print(f'Account 1 balance: {account.get_current_balance()}')
+print(f'Transaction 3 status: {transaction_3.get_status()}')
+print(f'Branch 3 phone number: {branch_3.get_phone_number()}')
+
+print('====================VALIDATION: INVALID CHANGES REJECTED====================')
+
+client_1.set_email(12345)
+print(f'Client 1 email unchanged: {client_1.get_email()}')
+
+account.set_account_type(999)
+print(f'Account 1 type unchanged: {account.get_account_type()}')
+
+account.add_funds(-50)
+account.add_funds('fifty')
+print(f'Account 1 balance unchanged: {account.get_current_balance()}')
+
+account_2.withdraw(True)
+account_2.withdraw(99999)
+print(f'Account 2 balance unchanged: {account_2.get_current_balance()}')
+
+transaction_3.set_description(123)
+print(f'Transaction 3 description unchanged: {transaction_3.get_description()}')
+
+branch_3.set_phone_number(12345)
+print(f'Branch 3 phone number unchanged: {branch_3.get_phone_number()}')
+
+print('Invalid constructor data falls back to safe defaults:')
+bad_account = Account('abc', 123, -5, True)
+bad_account.display_information()
+
+print('====================VALIDATION: VALID CHANGES ACCEPTED====================')
+
+account_2.set_account_type('Everyday')
+print(f'Account 2 new type: {account_2.get_account_type()}')
+
+transaction_3.set_description('Birthday gift from family')
+print(f'Transaction 3 new description: {transaction_3.get_description()}')
+
 print('====================AGGREGATION: CLIENTS AND ACCOUNTS====================')
 
 client_1.add_account(account)

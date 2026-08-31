@@ -1,0 +1,82 @@
+CODE REVIEW RECORD
+==================
+
+Workshop 3-1 (Class 52363)
+Date: 19/08/2026
+Reviewed with: Anamika Cherukat
+
+WHAT WAS REVIEWED
+-----------------
+The Branch class (branch.py) and the Account class (account.py),
+focusing on the new getters/setters from Topic 3 and how validation
+was being added.
+
+DISCUSSION
+----------
+1. Setters inside methods / the delegation pattern
+   Anamika asked why update_phone_number() and set_phone_number()
+   both contained the same assignment. We discussed having a
+   behaviour method delegate its work to the setter, so the
+   assignment logic (and later, the validation) lives in only one
+   place. This was especially relevant to set_is_open, since we
+   discussed whether Branch should even have a public way to change
+   the opening state at all.
+
+2. Why set_is_open was removed
+   The opening state of a branch should only change through its
+   behaviours (open_branch() and close_branch()). A public
+   set_is_open() would let outside code bypass those rules, which
+   defeats the purpose of making __is_open private. It was also
+   agreed that get_is_open() was redundant with opening_state(),
+   which already returns a readable "Open"/"Closed".
+
+3. The bool-is-int trap
+   In Python, isinstance(True, int) returns True, so a validation
+   check like isinstance(amount, int) alone would accept True/False
+   as money amounts. Account's balance operations (add_funds,
+   withdraw) and constructor needed an extra guard.
+
+RESULTING DEVELOPMENT
+---------------------
+1. update_phone_number() now delegates to set_phone_number() instead
+   of duplicating the assignment:
+
+       def set_phone_number(self, new_phone_number):
+           if isinstance(new_phone_number, str):
+               self.__phone_number = new_phone_number
+           else:
+               print('Invalid phone number: change rejected.')
+
+       def update_phone_number(self, phone_number):
+           self.set_phone_number(phone_number)
+           print(f'{self.__branch_name} branch phone number updated\n')
+
+   When validation was added in Task 3, it only needed to be written
+   once inside the setter, and the behaviour method inherited it
+   automatically. This improved the design by giving the phone number
+   a single source of truth.
+
+2. set_is_open() was deleted from Branch. The opening state can now
+   only be changed by open_branch()/close_branch(), and can only be
+   read through opening_state(). This strengthened the encapsulation
+   of the Branch class.
+
+3. All numeric validation in Account now excludes booleans:
+
+       def withdraw(self, amount):
+           if not (isinstance(amount, int) and not isinstance(amount, bool)):
+               print("Invalid amount: must be a number.")
+               return
+           ...
+
+   This was demonstrated in main.py: account_2.withdraw(True) is now
+   rejected with "Invalid amount: must be a number." instead of
+   silently treating True as the amount 1. Without this, a boolean
+   could have corrupted a real balance.
+
+WHAT I LEARNED
+--------------
+Encapsulation is about protecting object state, not just hiding
+attributes. Every path that changes an attribute should go through
+one validated method, and some attributes (like the branch opening
+state) should have no direct setter at all.
