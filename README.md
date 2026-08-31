@@ -4,7 +4,7 @@ A finance organisation system managing clients, accounts, transactions and
 branches, built with Python OOP concepts: encapsulation, validation,
 getters/setters, association and aggregation.
 
-## Design Note (Topic 3/4 — Assessing the Current Design)
+## Design Notes
 
 ### Class responsibilities
 
@@ -50,7 +50,4 @@ getters/setters, association and aggregation.
 
 ### S.O.L.I.D
 
-Each class currently follows the Single Responsibility Principle. The
-remaining principles (Open/Closed, Liskov Substitution, Interface
-Segregation, Dependency Inversion) are not yet meaningfully applicable
-without inheritance and interfaces, which arrive in later topics.
+Each class currently follows the Single Responsibility Principle. 
