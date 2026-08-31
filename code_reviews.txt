@@ -1,6 +1,100 @@
 CODE REVIEW RECORD
 ==================
 
+Workshop 1-1 (Class 52363)
+Date: 07/08/2026
+Reviewed with: Anamika Cherukat
+
+WHAT WAS REVIEWED
+-----------------
+The project scenario (scenario.txt) and the first version of the
+system, which held every class inside one module (FinanceCompany.py).
+
+DISCUSSION
+----------
+We discussed how to translate the scenario into classes. The finance
+organisation needs to manage clients, accounts and transactions, and
+the branch information appears in the scenario as well. The initial
+version kept Client and Account in the same file, and Anamika asked
+how I would decide what should be its own class. We talked about
+reading the scenario for the important nouns (Client, Account,
+Transaction, Branch) as candidate classes, and the verbs (deposit,
+withdraw, process, open, close) as candidate behaviours.
+
+This was relevant at this stage because it set up the structure for
+everything that followed: a class per concept with its own
+responsibilities, instead of one file doing everything.
+
+RESULTING DEVELOPMENT
+---------------------
+The system was planned around four classes instead of one combined
+module. Client and Account were later separated into client.py and
+account.py, with Transaction and Branch to follow:
+
+    class Client:
+        ...contact information...
+    class Account:
+        ...balance behaviour...
+
+This improved the design because each class could be developed,
+tested and read on its own, and it made the later encapsulation work
+possible.
+
+WHAT I LEARNED
+--------------
+Design starts with the scenario, not the code. Identifying the nouns
+and verbs in the requirements gives a first model of the classes and
+their responsibilities before any code is written.
+
+
+Workshop 2-1 (Class 52363)
+Date: 14/08/2026
+Reviewed with: Anamika Cherukat
+
+WHAT WAS REVIEWED
+-----------------
+The newly separated modules (client.py, account.py, transaction.py,
+branch.py), the main.py demonstration which creates several
+independent instances, and the way objects were being displayed.
+
+DISCUSSION
+----------
+The review focused on whether the module split had improved the
+project and on the demonstration output. With the classes in
+separate modules, main.py imports and instantiates each class, and
+the objects are independent of each other. However, printing an
+object directly produced output like:
+
+    <__main__.Client object at 0x000001A4...>
+
+Anamika asked what that output tells a reader, and we discussed how
+Python decides what to print for an object, and how a __str__()
+method lets each class describe its own objects in a readable way.
+
+RESULTING DEVELOPMENT
+---------------------
+A __str__() method was added to every class so that printing an
+object shows a readable description of its current state, for
+example:
+
+    def __str__(self):
+        return (f"Account {self.__account_no} is a {self.__account_type} "
+                f"account with a current balance of "
+                f"{self.__current_balance}, created on {self.__date_created}")
+
+The long attribute-by-attribute print statements in main.py were then
+replaced by printing the objects themselves. This improved the
+demonstration because the output now describes each object and
+reflects state changes automatically, rather than relying on manual
+print lines that could fall out of date.
+
+WHAT I LEARNED
+--------------
+Objects can describe themselves. Dunder methods like __str__ (and
+later __repr__) are called by Python automatically, so the class is
+the right place to define how an object is displayed.
+
+
 Workshop 3-1 (Class 52363)
 Date: 19/08/2026
 Reviewed with: Anamika Cherukat
@@ -41,15 +135,15 @@ RESULTING DEVELOPMENT
 1. update_phone_number() now delegates to set_phone_number() instead
    of duplicating the assignment:
 
-       def set_phone_number(self, new_phone_number):
-           if isinstance(new_phone_number, str):
-               self.__phone_number = new_phone_number
-           else:
-               print('Invalid phone number: change rejected.')
+        def set_phone_number(self, new_phone_number):
+            if isinstance(new_phone_number, str):
+                self.__phone_number = new_phone_number
+            else:
+                print('Invalid phone number: change rejected.')
 
-       def update_phone_number(self, phone_number):
-           self.set_phone_number(phone_number)
-           print(f'{self.__branch_name} branch phone number updated\n')
+        def update_phone_number(self, phone_number):
+            self.set_phone_number(phone_number)
+            print(f'{self.__branch_name} branch phone number updated\n')
 
    When validation was added in Task 3, it only needed to be written
    once inside the setter, and the behaviour method inherited it
@@ -63,11 +157,11 @@ RESULTING DEVELOPMENT
 
 3. All numeric validation in Account now excludes booleans:
 
-       def withdraw(self, amount):
-           if not (isinstance(amount, int) and not isinstance(amount, bool)):
-               print("Invalid amount: must be a number.")
-               return
-           ...
+        def withdraw(self, amount):
+            if not (isinstance(amount, int) and not isinstance(amount, bool)):
+                print("Invalid amount: must be a number.")
+                return
+            ...
 
    This was demonstrated in main.py: account_2.withdraw(True) is now
    rejected with "Invalid amount: must be a number." instead of
@@ -80,3 +174,56 @@ Encapsulation is about protecting object state, not just hiding
 attributes. Every path that changes an attribute should go through
 one validated method, and some attributes (like the branch opening
 state) should have no direct setter at all.
+
+
+Workshop 3-2 (Class 52363)
+Date: 21/08/2026
+Reviewed with: Anamika Cherukat
+
+WHAT WAS REVIEWED
+-----------------
+The validation added to the Account class: the constructor checks,
+and the validated add_funds() and withdraw() behaviour methods,
+together with the setter validation pattern used across the project.
+
+DISCUSSION
+----------
+We discussed why constructors and setters treat invalid data
+differently. A constructor cannot "keep the old value" because there
+is none, so it falls back to a sensible default (for example a
+balance of 0 for an invalid amount). A setter, on the other hand,
+rejects the new value and leaves the existing valid state in place.
+Anamika asked how withdraw() decides what to check first, and we
+talked about the guard-clause structure: check the type, check the
+value is positive, check there are enough funds, and only deduct
+after every check has passed.
+
+RESULTING DEVELOPMENT
+---------------------
+withdraw() was structured with early returns so the deduction only
+happens on the fully valid path:
+
+    def withdraw(self, amount):
+        if not (isinstance(amount, int) and not isinstance(amount, bool)):
+            print("Invalid amount: must be a number.")
+            return
+        if amount <= 0:
+            print("Invalid amount: must be positive.")
+            return
+        if self.__current_balance < amount:
+            print('Not enough funds for withdrawal\n')
+            return
+        self.__current_balance = self.__current_balance - amount
+
+This was demonstrated in main.py by supplying invalid amounts
+(add_funds(-50), add_funds('fifty'), withdraw(True), withdraw(99999))
+and printing the balance after each rejection to confirm the object
+was never corrupted. This improved the project because validation now
+protects state rather than only printing a message.
+
+WHAT I LEARNED
+--------------
+Validation has two shapes: constructors replace invalid data with a
+safe default, setters refuse the change. Either way the object must
+end in a valid state, and the last line of a method should only run
+when every check has passed.
