@@ -50,7 +50,4 @@ getters/setters, association and aggregation.
 
 ### S.O.L.I.D
 
-Each class currently follows the Single Responsibility Principle. The
-remaining principles (Open/Closed, Liskov Substitution, Interface
-Segregation, Dependency Inversion) are not yet meaningfully applicable
-without inheritance and interfaces, which arrive in later topics.
+Each class currently follows the Single Responsibility Principle. 
