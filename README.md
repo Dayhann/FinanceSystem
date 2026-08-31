@@ -48,7 +48,7 @@ getters/setters, association and aggregation.
 - Client holds no transactions; a Client–Transaction relationship may
   become useful when transaction history or reporting is introduced.
 
-### SOLID
+### S.O.L.I.D
 
 Each class currently follows the Single Responsibility Principle. The
 remaining principles (Open/Closed, Liskov Substitution, Interface
