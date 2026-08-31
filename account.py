@@ -1,7 +1,15 @@
 class Account:
+    """Represents a financial account.
+
+    Main responsibility: managing account information and balance
+    behaviour. The balance can only change through add_funds() and
+    withdraw(), which validate the amount and (for withdrawals) the
+    available funds.
+    """
+
     def __init__(self, account_no, account_type, current_balance, date_created):
 
-        if isinstance(account_no, (int)) and not isinstance(account_no, bool) and account_no >= 0:
+        if isinstance(account_no, int) and not isinstance(account_no, bool) and account_no > 0:
             self.__account_no = account_no
         else:
             self.__account_no = 0
@@ -16,7 +24,7 @@ class Account:
         else:
             self.__date_created = ""
 
-        if isinstance(current_balance, (int)) and not isinstance(current_balance, bool) and current_balance >= 0:
+        if isinstance(current_balance, int) and not isinstance(current_balance, bool) and current_balance >= 0:
             self.__current_balance = current_balance
         else:
             self.__current_balance = 0

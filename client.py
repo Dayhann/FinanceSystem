@@ -3,6 +3,14 @@ from branch import Branch
 
 
 class Client:
+    """Represents a client of the finance organisation.
+
+    Main responsibility: managing the client's own information
+    (contact details) and the client's relationships - the accounts
+    the client holds (aggregation) and their preferred branch
+    (association).
+    """
+
     def __init__(self, client_no, first_name, last_name, email, address):
         if isinstance(client_no, int) and not isinstance(client_no, bool) and client_no > 0:
             self.__client_no = client_no

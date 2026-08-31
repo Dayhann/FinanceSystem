@@ -1,4 +1,15 @@
+from account import Account
+
+
 class Transaction:
+    """Represents a transaction on an account.
+
+    Main responsibility: managing transaction information and its
+    status. The status only changes through process_transaction()
+    and cancel_transaction(), and processing applies the amount to
+    a validated Account object.
+    """
+
     def __init__(self, transaction_id, transaction_type, amount, description,
                  status='Pending'):
         if (isinstance(transaction_id, int) and
@@ -28,6 +39,9 @@ class Transaction:
             self.__status = "Pending"
 
     def process_transaction(self, account):
+        if not isinstance(account, Account):
+            print('Invalid account: transaction requires an Account object.')
+            return
         if self.__status == 'Pending':
             if self.__transaction_type == 'Deposit':
                 account.add_funds(self.__amount)

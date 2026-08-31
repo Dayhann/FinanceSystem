@@ -1,4 +1,11 @@
 class Branch:
+    """Represents a physical branch of the finance organisation.
+
+    Main responsibility: managing branch information and opening
+    state. The opening state can only change through open_branch()
+    and close_branch().
+    """
+
     def __init__(self, branch_number, branch_name, location, phone_number,
                  is_open=False):
         if (isinstance(branch_number, int) and

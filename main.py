@@ -133,10 +133,14 @@ account_2.withdraw(99999)
 print(f'Account 2 balance unchanged: {account_2.get_current_balance()}')
 
 transaction_3.set_description(123)
-print(f'Transaction 3 description unchanged: {transaction_3.get_description()}')
+print(
+    f'Transaction 3 description unchanged: {transaction_3.get_description()}')
 
 branch_3.set_phone_number(12345)
 print(f'Branch 3 phone number unchanged: {branch_3.get_phone_number()}')
+
+transaction_3.process_transaction('not an account')
+print(f'Transaction 3 status unchanged: {transaction_3.get_status()}')
 
 print('Invalid constructor data falls back to safe defaults:')
 bad_account = Account('abc', 123, -5, True)
