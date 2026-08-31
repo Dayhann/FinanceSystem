@@ -4,7 +4,7 @@ A finance organisation system managing clients, accounts, transactions and
 branches, built with Python OOP concepts: encapsulation, validation,
 getters/setters, association and aggregation.
 
-## Design Note (Topic 3/4 — Assessing the Current Design)
+## Design Notes
 
 ### Class responsibilities
 
