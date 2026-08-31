@@ -105,3 +105,42 @@ print()
 print(repr(branch))
 print(repr(branch_2))
 print(repr(branch_3))
+
+print('====================AGGREGATION: CLIENTS AND ACCOUNTS====================')
+
+client_1.add_account(account)
+client_1.add_account(account_2)
+client_2.add_account(account_3)
+
+client_1.add_account(account)
+client_1.add_account('not an account')
+
+print(f'Client 1 accounts: '
+      f'{[acc.get_account_no() for acc in client_1.get_accounts()]}')
+print(f'Client 2 accounts: '
+      f'{[acc.get_account_no() for acc in client_2.get_accounts()]}')
+
+account_4 = Account(855201, 'Savings', 1000, '1/6/2026')
+client_3.add_account(account_4)
+client_3.remove_account(account_4)
+print('Account 4 still exists after removal from client 3:')
+account_4.display_information()
+
+print('====================ASSOCIATION: PREFERRED BRANCHES====================')
+
+client_1.set_preferred_branch(branch)
+client_2.set_preferred_branch(branch_3)
+client_3.set_preferred_branch('Glenelg')
+
+client_1.set_preferred_branch(branch_2)
+
+print(f'Client 1 preferred branch: '
+      f'{client_1.get_preferred_branch().get_branch_name()}')
+print(f'Client 2 preferred branch: '
+      f'{client_2.get_preferred_branch().get_branch_name()}')
+print(f'Client 3 preferred branch: {client_3.get_preferred_branch()}')
+
+print('Branches remain independent objects:')
+branch.display_information()
+branch_2.display_information()
+branch_3.display_information()

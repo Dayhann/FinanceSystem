@@ -1,3 +1,7 @@
+from account import Account
+from branch import Branch
+
+
 class Client:
     def __init__(self, client_no, first_name, last_name, email, address):
         if isinstance(client_no, int) and not isinstance(client_no, bool) and client_no > 0:
@@ -24,6 +28,9 @@ class Client:
             self.__address = address
         else:
             self.__address = ""
+
+        self.__accounts = []
+        self.__preferred_branch = None
 
     def show_contact_info(self):
         print(f'Client Number:{self.__client_no}')
@@ -58,6 +65,41 @@ class Client:
             self.__address = new_address
         else:
             print('Invalid address: change rejected.')
+
+    def add_account(self, account):
+        if not isinstance(account, Account):
+            print('Invalid account: only Account objects can be added.')
+            return
+        if account in self.__accounts:
+            print('Account already assigned to this client.')
+            return
+        self.__accounts.append(account)
+        print(f'Account {account.get_account_no()} added to client '
+              f'{self.__client_no}')
+
+    def remove_account(self, account):
+        if account not in self.__accounts:
+            print('Account is not assigned to this client.')
+            return
+        self.__accounts.remove(account)
+        print(f'Account {account.get_account_no()} removed from client '
+              f'{self.__client_no}')
+
+    def get_accounts(self):
+        return list(self.__accounts)
+
+    def set_preferred_branch(self, branch):
+        if branch is None or isinstance(branch, Branch):
+            self.__preferred_branch = branch
+            if branch is None:
+                print('Preferred branch cleared.')
+            else:
+                print(f'Preferred branch set to {branch.get_branch_name()}.')
+        else:
+            print('Invalid branch: change rejected.')
+
+    def get_preferred_branch(self):
+        return self.__preferred_branch
 
     def __str__(self):
         return (f"{self.__first_name} {self.__last_name} has the client number: "
