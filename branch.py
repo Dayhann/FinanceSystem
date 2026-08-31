@@ -1,11 +1,31 @@
 class Branch:
     def __init__(self, branch_number, branch_name, location, phone_number,
                  is_open=False):
-        self.__branch_number = branch_number
-        self.__branch_name = branch_name
-        self.__location = location
-        self.__phone_number = phone_number
-        self.__is_open = is_open
+        if (isinstance(branch_number, int) and
+                not isinstance(branch_number, bool) and branch_number > 0):
+            self.__branch_number = branch_number
+        else:
+            self.__branch_number = 0
+
+        if isinstance(branch_name, str):
+            self.__branch_name = branch_name
+        else:
+            self.__branch_name = ""
+
+        if isinstance(location, str):
+            self.__location = location
+        else:
+            self.__location = ""
+
+        if isinstance(phone_number, str):
+            self.__phone_number = phone_number
+        else:
+            self.__phone_number = ""
+
+        if isinstance(is_open, bool):
+            self.__is_open = is_open
+        else:
+            self.__is_open = False
 
     def open_branch(self):
         if self.__is_open:
@@ -23,7 +43,7 @@ class Branch:
 
     def opening_state(self):
         if self.__is_open:
-            return "Yes"
+            return "Open"
         else:
             return "Closed"
 
@@ -40,7 +60,10 @@ class Branch:
         return self.__phone_number
 
     def set_phone_number(self, new_phone_number):
-        self.__phone_number = new_phone_number
+        if isinstance(new_phone_number, str):
+            self.__phone_number = new_phone_number
+        else:
+            print('Invalid phone number: change rejected.')
 
     def update_phone_number(self, phone_number):
         self.set_phone_number(phone_number)

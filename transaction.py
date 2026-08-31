@@ -1,11 +1,31 @@
 class Transaction:
     def __init__(self, transaction_id, transaction_type, amount, description,
                  status='Pending'):
-        self.__transaction_id = transaction_id
-        self.__transaction_type = transaction_type
-        self.__amount = amount
-        self.__description = description
-        self.__status = status
+        if (isinstance(transaction_id, int) and
+                not isinstance(transaction_id, bool) and transaction_id > 0):
+            self.__transaction_id = transaction_id
+        else:
+            self.__transaction_id = 0
+
+        if isinstance(transaction_type, str):
+            self.__transaction_type = transaction_type
+        else:
+            self.__transaction_type = ""
+
+        if isinstance(amount, int) and not isinstance(amount, bool) and amount > 0:
+            self.__amount = amount
+        else:
+            self.__amount = 0
+
+        if isinstance(description, str):
+            self.__description = description
+        else:
+            self.__description = ""
+
+        if isinstance(status, str):
+            self.__status = status
+        else:
+            self.__status = "Pending"
 
     def process_transaction(self, account):
         if self.__status == 'Pending':
@@ -51,7 +71,10 @@ class Transaction:
         return self.__status
 
     def set_description(self, new_description):
-        self.__description = new_description
+        if isinstance(new_description, str):
+            self.__description = new_description
+        else:
+            print('Invalid description: change rejected.')
 
     def __str__(self):
         return (f"{self.__transaction_id} has the transaction type: "
