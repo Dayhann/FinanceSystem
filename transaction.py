@@ -11,7 +11,7 @@ class Transaction:
     """
 
     def __init__(self, transaction_id, transaction_type, amount, description,
-                 status='Pending'):
+                 status='Pending', resulting_balance=None):
         if (isinstance(transaction_id, int) and
                 not isinstance(transaction_id, bool) and transaction_id > 0):
             self.__transaction_id = transaction_id
@@ -37,6 +37,12 @@ class Transaction:
             self.__status = status
         else:
             self.__status = "Pending"
+
+        if (isinstance(resulting_balance, int) and
+                not isinstance(resulting_balance, bool) and resulting_balance >= 0):
+            self.__resulting_balance = resulting_balance
+        else:
+            self.__resulting_balance = None
 
     def process_transaction(self, account):
         if not isinstance(account, Account):
@@ -67,7 +73,10 @@ class Transaction:
         print(f'Transaction Type: {self.__transaction_type}')
         print(f'Amount: ${self.__amount}')
         print(f'Description: {self.__description}')
-        print(f'Status: {self.__status}\n')
+        print(f'Status: {self.__status}')
+        if self.__resulting_balance is not None:
+            print(f'Resulting Balance: ${self.__resulting_balance}')
+        print()
 
     def get_transaction_id(self):
         return self.__transaction_id
@@ -84,6 +93,11 @@ class Transaction:
     def get_status(self):
         return self.__status
 
+    def get_resulting_balance(self):
+        return self.__resulting_balance
+
+    resulting_balance = property(get_resulting_balance)
+
     def set_description(self, new_description):
         if isinstance(new_description, str):
             self.__description = new_description
@@ -91,13 +105,17 @@ class Transaction:
             print('Invalid description: change rejected.')
 
     def __str__(self):
-        return (f"{self.__transaction_id} has the transaction type: "
+        text = (f"{self.__transaction_id} has the transaction type: "
                 f"{self.__transaction_type} with the amount: {self.__amount}, "
                 f"description: {self.__description}, "
                 f"and the status: {self.__status}")
+        if self.__resulting_balance is not None:
+            text += f" (resulting balance: ${self.__resulting_balance})"
+        return text
 
     def __repr__(self):
         return (f"Transaction(transaction_id={self.__transaction_id}, "
                 f"transaction_type='{self.__transaction_type}', "
                 f"amount={self.__amount}, description='{self.__description}', "
-                f"status='{self.__status}')")
+                f"status='{self.__status}', "
+                f"resulting_balance={self.__resulting_balance})")

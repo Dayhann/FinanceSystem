@@ -82,7 +82,7 @@ class Client:
             print('Account already assigned to this client.')
             return
         self.__accounts.append(account)
-        print(f'Account {account.get_account_no()} added to client '
+        print(f'Account {account.account_no} added to client '
               f'{self.__client_no}')
 
     def remove_account(self, account):
@@ -90,7 +90,7 @@ class Client:
             print('Account is not assigned to this client.')
             return
         self.__accounts.remove(account)
-        print(f'Account {account.get_account_no()} removed from client '
+        print(f'Account {account.account_no} removed from client '
               f'{self.__client_no}')
 
     def get_accounts(self):
